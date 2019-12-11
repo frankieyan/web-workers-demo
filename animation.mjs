@@ -17,12 +17,12 @@ function animateBall() {
   }
 
   currentX += direction
-  animatedBall.setAttribute('style', `transform: translate(${currentX}px)`)
+  animatedBall.style.transform = `translate(${currentX}px)`
 }
 
 function runAnimation() {
   cancelAnimationFrame(animationFrame)
-  animationFrame = requestAnimationFrame(() => runAnimation())
+  animationFrame = requestAnimationFrame(runAnimation)
 
   animateBall()
 }

@@ -1,7 +1,52 @@
+body {
+  display: flex;
+  margin: 0;
+  background: linear-gradient(0.25turn, #0f141d, #1e1d27, #180d24);
+}
+
+#animation-container {
+  position: relative;
+  height: 180px;
+}
+
+#controls {
+  position: absolute;
+  box-sizing: border-box;
+  width: 100vw;
+  height: calc(100vh - 180px);
+  bottom: 0;
+  padding-top: 40px;
+  overflow-y: scroll;
+  background: white;
+  box-shadow: 0 0 14px #000;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
 #animated-ball {
+  position: absolute;
   display: block;
   width: 100px;
   height: 100px;
+  top: 40px;
   border-radius: 50px;
-  background-color: blue;
+  background: linear-gradient(217deg, rgba(255,255,255,.8), rgba(255,255,255,0) 70.71%),
+            linear-gradient(127deg, rgba(0, 124, 196, 0.8), rgba(0,124,196,0) 70.71%),
+            linear-gradient(336deg, rgba(0, 36, 135, 0.8), rgba(0,36,135,0) 70.71%);
+  box-shadow: 1px 1px 4px #000;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+button {
+  height: 60px;
+  width: 160px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 4px #ddd;
+  font-size: 14px;
 }
