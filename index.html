@@ -13,12 +13,18 @@
   </section>
 
   <section id="controls">
-    <section class="button-group">
-      <button id="start-main">Process in main</button>
-      <button id="start-worker">Process in worker</button>
+    <section class="example-group">
+      <div>
+        <h4>
+          Give me the x-th fibonacci number:
+          <input id="fib-input" type="number" value="40" step="1" max="42">
+        </h4>
+      </div>
+      <button id="fib-main">Main thread</button>
+      <button id="fib-worker">Worker thread</button>
+      <h5>Results:</h5>
+      <p id="fib-results"></p>
     </section>
-
-    <section id="data"></section>
   </section>
   <script type="module" src="index.mjs"></script>
 </body>

@@ -1,45 +1,47 @@
 import { runAnimation } from './animation.mjs'
 
-const startMainButton = document.querySelector('#start-main')
-const startWorkerButton = document.querySelector('#start-worker')
-const dataContainer = document.querySelector('#data')
+const fibMainButton = document.querySelector('#fib-main')
+const fibWorkerButton = document.querySelector('#fib-worker')
+const fibInput = document.querySelector('#fib-input')
+const fibResults = document.querySelector('#fib-results')
 const worker = new Worker('worker.js')
-const length = 100000000
 
 runAnimation()
 
-startMainButton.addEventListener('click', () => {
-  let data = []
+fibMainButton.addEventListener('click', handleFibMain)
+fibWorkerButton.addEventListener('click', handleFibWorker)
 
-  while(data.length < length) {
-    data.push('block')
+function handleFibMain() {
+  fibResults.innerHTML = ''
+
+  // Throwing this in a timeout to give the results element a chance to repaint
+  setTimeout(() => {
+    const startTime = performance.now()
+    const result = fibonacci(fibInput.value)
+    console.log(`Completed in: ${performance.now() - startTime}ms`)
+
+    fibResults.innerHTML = result
+  }, 20)
+}
+
+function handleFibWorker() {
+  fibResults.innerHTML = ''
+  const startTime = performance.now()
+
+  worker.onmessage = function onReceiveFibResultsFromWorker(event) {
+    const { data: result } = event
+    console.log(`Completed in: ${performance.now() - startTime}ms`)
+    fibResults.innerHTML = result
   }
 
-  console.log(`Processed ${data.length} items`)
-  console.log({ data })
-  data = null
-})
+  worker.postMessage({ length: fibInput.value })
+}
 
-startWorkerButton.addEventListener('click', () => {
-  worker.onmessage = event => {
-    const { data } = event
-    console.log(data)
+// O(2^n) of death
+function fibonacci(n) {
+  if (n <= 1) {
+    return n
   }
 
-  worker.postMessage({ length })
-})
-
-function renderData(data) {
-  dataContainer.innerHTML = ''
-
-  data.forEach((item, index) => {
-    setTimeout(() => {
-      console.log(`Processing DOM node for item #${index}`)
-      const newNode = document.createElement('span')
-      newNode.innerText = `${item}, `
-      dataContainer.appendChild(newNode)
-    })
-  })
-
-  console.log('Done queueing DOM nodes')
+  return fibonacci(n - 1) + fibonacci(n - 2);
 }

@@ -2,6 +2,7 @@ body {
   display: flex;
   margin: 0;
   background: linear-gradient(0.25turn, #0f141d, #1e1d27, #180d24);
+  font-family: Arial, sans-serif;
 }
 
 #animation-container {
@@ -15,7 +16,7 @@ body {
   width: 100vw;
   height: calc(100vh - 180px);
   bottom: 0;
-  padding-top: 40px;
+  padding: 40px;
   overflow-y: scroll;
   background: white;
   box-shadow: 0 0 14px #000;
@@ -36,10 +37,13 @@ body {
   box-shadow: 1px 1px 4px #000;
 }
 
-.button-group {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+.example-group {
+  display: grid;
+  grid: auto-flow / 1fr 1fr 1fr;
+}
+
+.example-group:not(:last) {
+  border-bottom: 1px solid #ccc;
 }
 
 button {

@@ -1,12 +1,14 @@
 addEventListener('message', event => {
   const { length } = event.data
-  let data = []
+  const result = fibonacci(length)
+  postMessage(result)
+})
 
-  while(data.length < length) {
-    data.push('block')
+// O(2^n) of death
+function fibonacci(n) {
+  if (n <= 1) {
+    return n
   }
 
-  console.log(`Processed ${data.length} items`)
-  console.log({ data })
-  data = null
-})
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
