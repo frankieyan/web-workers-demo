@@ -31,27 +31,31 @@ chunkWorkerButton.addEventListener('click', handleChunkWorker)
 
 function handleFibMain() {
   fibResults.innerHTML = ''
+  fibMainButton.disabled = true
 
   // Throwing this in a timeout to give the results element a chance to repaint
   setTimeout(() => {
     const startTime = performance.now()
     const result = fibonacci(fibInput.value)
-    console.log(`Completed in: ${performance.now() - startTime}ms`)
 
     fibResults.innerHTML = result
+    console.log(`Completed in: ${performance.now() - startTime}ms`)
+    fibMainButton.disabled = false
   }, 20)
 }
 
 function handleFibWorker() {
   fibResults.innerHTML = ''
+  fibWorkerButton.disabled = true
   const startTime = performance.now()
 
   worker.onmessage = function onReceiveFibResultsFromWorker(event) {
     const { type, result } = event.data
     if (type !== 'FIBONACCI') return
 
-    console.log(`Completed in: ${performance.now() - startTime}ms`)
     fibResults.innerHTML = result
+    console.log(`Completed in: ${performance.now() - startTime}ms`)
+    fibWorkerButton.disabled = false
   }
 
   worker.postMessage({ type: 'FIBONACCI', payload: fibInput.value })
@@ -59,6 +63,7 @@ function handleFibWorker() {
 
 function handleArrayMain() {
   arrayResults.innerHTML = ''
+  arrayMainButton.disabled = true
 
   setTimeout(() => {
     const startTime = performance.now()
@@ -67,11 +72,13 @@ function handleArrayMain() {
     const textNode = document.createTextNode(`Total array size processed: ${result.length}`)
     arrayResults.appendChild(textNode)
     console.log(`Completed in: ${performance.now() - startTime}ms`)
+    arrayMainButton.disabled = false
   }, 20)
 }
 
 function handleArrayWorker() {
   arrayResults.innerHTML = ''
+  arrayWorkerButton.disabled = true
   const startTime = performance.now()
 
   worker.onmessage = function onReceiveArrayResultsFromWorker(event) {
@@ -80,6 +87,7 @@ function handleArrayWorker() {
     const textNode = document.createTextNode(`Total array size processed: ${result.length}`)
     arrayResults.appendChild(textNode)
     console.log(`Completed in: ${performance.now() - startTime}ms`)
+    arrayWorkerButton.disabled = false
   }
 
   worker.postMessage({ type: 'POPULATE_ARRAY', payload: arrayInput.value })
@@ -87,6 +95,7 @@ function handleArrayWorker() {
 
 function handleChunkMain() {
   chunkResults.innerHTML = ''
+  chunkMainButton.disabled = true
 
   setTimeout(async () => {
     const startTime = performance.now()
@@ -112,11 +121,13 @@ function handleChunkMain() {
     const textNode = document.createTextNode(`Total array size processed: ${completed}`)
     chunkResults.appendChild(textNode)
     console.log(`Completed in: ${performance.now() - startTime}ms`)
+    chunkMainButton.disabled = false
   }, 20)
 }
 
 function handleChunkWorker() {
   chunkResults.innerHTML = ''
+  chunkWorkerButton.disabled = true
   const startTime = performance.now()
   let firedMessages = 0
   let receivedMessages = 0
@@ -133,6 +144,7 @@ function handleChunkWorker() {
       const textNode = document.createTextNode(`Total array size processed: ${completed}`)
       chunkResults.appendChild(textNode)
       console.log(`Completed in: ${performance.now() - startTime}ms`)
+      chunkWorkerButton.disabled = false
     }
   }
 
