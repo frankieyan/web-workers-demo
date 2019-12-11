@@ -36,7 +36,23 @@
       <button id="array-main">Main thread</button>
       <button id="array-worker">Worker thread</button>
       <h5>Results:</h5>
-      <pre id="array-results" class="result"></pre>
+      <pre id="array-results" class="result code-results"></pre>
+    </section>
+
+    <section class="example-group">
+      <div>
+        <h4>
+          Populate a large array:
+          <input id="chunk-source-input" type="number" value="10000" step="100">
+          <br>
+          By chunks of:
+          <input id="chunk-interval-input" type="number" value="100" step="10">
+        </h4>
+      </div>
+      <button id="chunk-main">Main thread</button>
+      <button id="chunk-worker">Worker thread</button>
+      <h5>Results:</h5>
+      <pre id="chunk-results" class="result code-results"></pre>
     </section>
   </section>
   <script type="module" src="index.mjs"></script>
