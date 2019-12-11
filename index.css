@@ -16,7 +16,7 @@ body {
   width: 100vw;
   height: calc(100vh - 180px);
   bottom: 0;
-  padding: 40px;
+  padding: 20px 40px;
   overflow-y: scroll;
   background: white;
   box-shadow: 0 0 14px #000;
@@ -40,10 +40,15 @@ body {
 .example-group {
   display: grid;
   grid: auto-flow / 1fr 1fr 1fr;
+  padding: 40px 0;
 }
 
-.example-group:not(:last) {
+.example-group:not(:last-of-type) {
   border-bottom: 1px solid #ccc;
+}
+
+.result {
+  grid-column: 2 / 4;
 }
 
 button {
@@ -53,4 +58,9 @@ button {
   cursor: pointer;
   box-shadow: 1px 1px 4px #ddd;
   font-size: 14px;
+}
+
+#array-results {
+  border: 1px solid #ccc;
+  overflow-x: scroll;
 }
