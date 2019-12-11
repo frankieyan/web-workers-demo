@@ -35,11 +35,9 @@ function fibonacci(n) {
 function populateArray(size) {
   return Array.from(new Array(parseInt(size, 10)))
     .map((_, index) => size - index)
-    .join(', ')
 }
 
 function populateChunk(start, end) {
   return Array.from(new Array(parseInt(start, 10) - parseInt(end, 10)))
     .map((_, index) => start - index)
-    .join(', ')
 }

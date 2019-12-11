@@ -64,7 +64,7 @@ function handleArrayMain() {
     const startTime = performance.now()
     const result = populateArray(arrayInput.value)
 
-    const textNode = document.createTextNode(result)
+    const textNode = document.createTextNode(`Total array size processed: ${result.length}`)
     arrayResults.appendChild(textNode)
     console.log(`Completed in: ${performance.now() - startTime}ms`)
   }, 20)
@@ -77,8 +77,7 @@ function handleArrayWorker() {
   worker.onmessage = function onReceiveArrayResultsFromWorker(event) {
     const { type, result } = event.data
     if (type !== 'POPULATE_ARRAY') return
-
-    const textNode = document.createTextNode(result)
+    const textNode = document.createTextNode(`Total array size processed: ${result.length}`)
     arrayResults.appendChild(textNode)
     console.log(`Completed in: ${performance.now() - startTime}ms`)
   }
@@ -95,6 +94,7 @@ function handleChunkMain() {
     const pageSize = parseInt(chunkIntervalInput.value, 10)
     const pages = Math.floor(total / pageSize)
     const remainder = total % pageSize
+    let completed = 0
 
     const remaining = new Promise(resolve => resolve(populateChunk(total, total - remainder)))
     const chunks = Array.from(new Array(pages)).map((_, index) => {
@@ -106,10 +106,11 @@ function handleChunkMain() {
     })
 
     for await (let chunk of [remaining, ...chunks]) {
-      const textNode = document.createTextNode(chunk)
-      chunkResults.appendChild(textNode)
+      completed += chunk.length
     }
 
+    const textNode = document.createTextNode(`Total array size processed: ${completed}`)
+    chunkResults.appendChild(textNode)
     console.log(`Completed in: ${performance.now() - startTime}ms`)
   }, 20)
 }
@@ -117,18 +118,20 @@ function handleChunkMain() {
 function handleChunkWorker() {
   chunkResults.innerHTML = ''
   const startTime = performance.now()
-  let count = 0
+  let firedMessages = 0
+  let receivedMessages = 0
   let completed = 0
 
   worker.onmessage = function onReceiveChunkResultsFromWorker(event) {
     const { type, result } = event.data
     if (type !== 'POPULATE_CHUNK') return
-    completed++
+    receivedMessages++
 
-    const textNode = document.createTextNode(result)
-    chunkResults.appendChild(textNode)
+    completed += result.length
 
-    if (completed == count) {
+    if (receivedMessages == firedMessages) {
+      const textNode = document.createTextNode(`Total array size processed: ${completed}`)
+      chunkResults.appendChild(textNode)
       console.log(`Completed in: ${performance.now() - startTime}ms`)
     }
   }
@@ -146,7 +149,7 @@ function handleChunkWorker() {
     return { start, end }
   })
   const allPayloads = [remaining, ...chunks]
-  count = allPayloads.length
+  firedMessages = allPayloads.length
 
   allPayloads.forEach(payload => {
     worker.postMessage({ type: 'POPULATE_CHUNK', payload })
@@ -165,11 +168,9 @@ function fibonacci(n) {
 function populateArray(size) {
   return Array.from(new Array(parseInt(size, 10)))
     .map((_, index) => size - index)
-    .join(', ')
 }
 
 function populateChunk(start, end) {
   return Array.from(new Array(parseInt(start, 10) - parseInt(end, 10)))
     .map((_, index) => start - index)
-    .join(', ')
 }
